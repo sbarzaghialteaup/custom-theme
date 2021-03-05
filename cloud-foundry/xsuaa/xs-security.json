@@ -1,0 +1,59 @@
+{
+    "xsappname": "solutions-portal",
+    "tenant-mode": "dedicated",
+    "description": "Security profile for Solutions Portal",
+    "scopes": [
+        {
+            "name": "uaa.user",
+            "description": "UAA"
+        },
+        {
+            "name": "$XSAPPNAME.Admin",
+            "description": "Solution Portal - Admin"
+        },
+        {
+            "name": "$XSAPPNAME.CostsManager",
+            "description": "Solution Portal - Costs Manager"
+        },
+        {
+            "name": "$XSAPPNAME.User",
+            "description": "Solution Portal - User"
+        },
+        {
+            "name": "$XSAPPNAME.AppSystems",
+            "description": "Solution Portal - App Systems"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Token_Exchange",
+            "description": "UAA",
+            "scope-references": ["uaa.user"]
+        },
+        {
+            "name": "SolutionsPortalAdmin",
+            "description": "Solution Portal Admin",
+            "scope-references": [
+                "$XSAPPNAME.Admin",
+                "$XSAPPNAME.User",
+                "$XSAPPNAME.AppSystems",
+                "$XSAPPNAME.CostsManager"
+            ]
+        },
+        {
+            "name": "SolutionsPortalUser",
+            "description": "Solution Portal User",
+            "scope-references": ["$XSAPPNAME.User", "$XSAPPNAME.AppSystems"]
+        },
+        {
+            "name": "SolutionsCostsManager",
+            "description": "Solution Costs Manager",
+            "scope-references": ["$XSAPPNAME.CostsManager"]
+        },
+        {
+            "name": "SolutionsPortalSystems",
+            "description": "Solution Portal App Systems",
+            "scope-references": ["$XSAPPNAME.AppSystems"]
+        }
+    ]
+}

@@ -1,0 +1,120 @@
+ID: custom-theme
+_schema-version: 3.2.0
+description: Solutions Portal
+version: 1.0.47-dacad2f18ce7d5eda36d4ff6ea15813415e55937
+parameters:
+  enable-parallel-deployments: true
+#
+# ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ #
+#    MODULES                                 #
+# ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ #
+#
+modules:
+  #
+  #   ╔═══════════════════════════════════════╗   #
+  #   ║               APP ROUTER              ║   #
+  #   ╚═══════════════════════════════════════╝   #
+  #
+  - name: approuter
+    type: nodejs
+    path: cloud-foundry/approuter
+    parameters:
+      disk-quota: 512M
+      memory: 128M
+    build-parameters:
+      ignore: ["default-env.json", "node_modules/"]
+      builder: custom
+      commands: []
+    requires:
+      - name: cap-template-destination
+      - name: cap-template-uaa
+      - name: cap-template-html5-repo-runtime
+      - name: cap-template-portal
+      - name: cap-template-theming
+  #
+  #   ╔═══════════════════════════════════════╗   #
+  #   ║            PORTAL DEPLOYER            ║   #
+  #   ╚═══════════════════════════════════════╝   #
+  #
+  - name: cap-template-portal-deployer
+    type: com.sap.application.content
+    path: cloud-foundry/portal-deployer
+    requires:
+      - name: cap-template-portal
+        parameters:
+          content-target: true
+          service-key:
+            name: content-deploy-key
+            config:
+              content-endpoint: developer
+      - name: cap-template-html5-repo-host
+      - name: cap-template-uaa
+#
+# ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ #
+#     RESOURCES                              #
+# ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ #
+#
+resources:
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │            DESTINATIONS             │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: cap-template-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │                XSUAA                │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: cap-template-uaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: cloud-foundry/xsuaa/xs-security.json
+      service-plan: application
+      service: xsuaa
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │            HTML5 RUNTIME            │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: cap-template-html5-repo-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │              HTML5 HOST             │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: cap-template-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+      config:
+        sizeLimit: 1
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │            PORTAL SERVICE           │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: cap-template-portal
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: standard
+      service: portal
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │           UI THEME DESIGNER         │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: cap-template-theming
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: theming
+      service-plan: standard

@@ -1,0 +1,57 @@
+{
+    "name": "cap-template",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/cds": "^4.6.4",
+        "@sap/hana-client": "^2.7.23",
+        "@sap/xsenv": "^3.1.0",
+        "@sap/xssec": "^3.1.2",
+        "csvtojson": "^2.0.10",
+        "express": "^4.17.1",
+        "passport": "^0.4.1",
+        "request": "^2.88.2",
+        "sqlite3": "^5.0.2"
+    },
+    "engines": {
+        "node": "12.20.0",
+        "npm": "6.14.9"
+    },
+    "scripts": {
+        "start": "NODE_OPTIONS=--max_old_space_size=192 cds run",
+        "build": "scripts/build.sh",
+        "deploy-local": "scripts/deploy-local.sh",
+        "deploy-test": "scripts/deploy-test.sh",
+        "deploy-prod": "scripts/deploy-prod.sh",
+        "watch": "scripts/watch.sh"
+    },
+    "cds": {
+        "hana": {
+            "deploy-format": "hdbtable"
+        },
+        "requires": {
+            "uaa": {
+                "kind": "xsuaa"
+            }
+        },
+        "[development]": {
+            "requires": {
+                "db": {
+                    "kind": "sqlite",
+                    "model": "*"
+                }
+            }
+        },
+        "[production]": {
+            "requires": {
+                "db": {
+                    "kind": "sql",
+                    "model": "*"
+                }
+            }
+        }
+    }
+}
