@@ -69,7 +69,7 @@
                     "groupsOrder": ["Group1"],
                     "sap.cloud.portal": {
                         "config": {
-                            "theme.id": "alteaup",
+                            "theme.id": "test",
                             "theme.active": [
                                 "sap_fiori_3",
                                 "sap_fiori_3_dark",
