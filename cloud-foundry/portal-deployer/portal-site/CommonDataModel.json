@@ -78,8 +78,7 @@
                                 "sap_belize_hcw",
                                 "alteaup",
                                 "test"
-                            ],
-                            "ui5LibraryUrl": "https://sapui5.hana.ondemand.com/"
+                            ]
                         }
                     }
                 }
